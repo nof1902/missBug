@@ -1,0 +1,105 @@
+[
+  {
+    "username": "draco malfoy",
+    "password": "$2b$10$qyLZFsfc4w8DAA0zjxGR2ObWp8gl/ActBP5WTXrUbbta7J0NG8qFq",
+    "fullname": "draco malfoy",
+    "_id": "XytMhm",
+    "score": 109,
+    "createdAt": 1708013442037,
+    "isAdmin": false,
+    "userBugList": [
+      {
+        "_id": "SZGHYX",
+        "title": "browser routing",
+        "severity": 99,
+        "description": "broser routing",
+        "label": "need-CR",
+        "creator": {
+          "_id": "XytMhm",
+          "fullname": "draco malfoy "
+        }
+      }
+    ]
+  },
+  {
+    "fullname": "gini weasley",
+    "username": "gini weasley",
+    "password": "$2b$10$78Kz.9Kw9e/qAx0J5CJ1Pe4ponGCtU6GuMFFtove0L2NoRbH1WwxC",
+    "_id": "yVIEO9",
+    "score": 527,
+    "createdAt": 1708016947546,
+    "isAdmin": false
+  },
+  {
+    "fullname": "cho chang",
+    "username": "cho chang",
+    "password": "$2b$10$66cS5S3YMTFJO6ZZTm5fmefkIqWDukhLsNb5RdKcgs3FISUCXM73.",
+    "_id": "Kh2Ljf",
+    "score": 215,
+    "createdAt": 1708017016951,
+    "isAdmin": false,
+    "userBugList": [
+      {
+        "_id": "1GrILL",
+        "title": "user-msg do not work",
+        "severity": 23,
+        "description": "do not show user msg when removing bugs from list",
+        "label": "dev-branch",
+        "createdAt": "2024-02-03T17:03:18.247Z",
+        "creator": {
+          "_id": "Kh2Ljf",
+          "fullname": "cho chang"
+        }
+      },
+      {
+        "title": "encryption errors",
+        "severity": 45,
+        "description": "do not encrypte properly ",
+        "label": "critical",
+        "_id": "xDcQ7m",
+        "createdAt": "2024-02-17T11:03:22.327Z",
+        "creator": {
+          "_id": "Kh2Ljf",
+          "fullname": "cho chang"
+        }
+      }
+    ]
+  },
+  {
+    "username": "fred weasley",
+    "password": "$2b$10$TEcELDcEblT1p7koH/o60e1fXQnqpn9dEYhqDMj9xi3YdXRHgfJ5K",
+    "fullname": "fred weasley",
+    "_id": "fcE2c7",
+    "score": 17,
+    "createdAt": 1708178882112,
+    "isAdmin": false
+  },
+  {
+    "username": "admin",
+    "password": "$2b$10$SyuKkQYL/d.mKM0djjJvZOmLs78pRfIho/cn.OIoTH0TyoDgXyTEi",
+    "fullname": "admin",
+    "_id": "Gt0g3l",
+    "score": 928,
+    "createdAt": 1708186622363,
+    "isAdmin": true,
+    "userBugList": []
+  },
+  {
+    "username": "albus dumbledore",
+    "password": "$2b$10$oMJ37jtXLdiFg62ubZsbxOq.dmh4Mma8QbaSuytY3CfKdBtg9OQu.",
+    "fullname": "albus dumbledore",
+    "_id": "dPpQOt",
+    "score": 425,
+    "createdAt": 1708194511847,
+    "isAdmin": false
+  },
+  {
+    "username": "nof",
+    "password": "$2b$10$0pWMQdM60yMA0VEjV8GYx.4c/CoYUFQMUAxoGJek6Z7tyLaKxdhP6",
+    "fullname": "nof",
+    "_id": "pCQERV",
+    "score": 951,
+    "createdAt": 1708271378400,
+    "isAdmin": false
+  }
+]
