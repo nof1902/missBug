@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 
-const app = express();
 
 // dev env - here defined ports/URL that allowed to send req to server
 const corsOptions = {
@@ -11,6 +10,9 @@ const corsOptions = {
   // credentials - allows to receive the "casing" that comes with a request - header for example
   credentials: true,
 };
+
+
+const app = express();
 // The node server's default operation does not allow receiving different detailed readings
 // Cors - allowed to communicated between front & back at develope time - through different ports
 app.use(cors(corsOptions));
@@ -24,6 +26,9 @@ app.use(express.json());
 // using cookies
 app.use(cookieParser());
 
+// ======================
+// end points
+// ======================
 import { bugRoutes } from "./api/bug/bug.routes.js";
 import { userRoutes } from "./api/user/user.routes.js";
 import { authRoutes } from "./api/auth/auth.routes.js";
@@ -33,6 +38,10 @@ app.use("/api/bug", bugRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 
+
+// ======================
+// fronend end point
+// ======================
 app.get("/**", (req, res) => {
   res.sendFile(path.resolve("public/index.html"));
 });
