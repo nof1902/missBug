@@ -52,7 +52,7 @@ export async function addBug(req, res) {
   const bugToSave = { title, severity, description, label};
 
   try {
-    await bugService.save(bugToSave,req.loggedinUser);
+    await bugService.add(bugToSave,req.loggedinUser);
     res.send(`bug- ${bugToSave.title} added successfully`);
   } catch (err) {
     res.status(400).send(`Couldn't save bugs `, err);
@@ -63,7 +63,6 @@ export async function addBug(req, res) {
 export async function removeBug(req, res) {
   try {
     const { bugId } = req.params;
-
     await bugService.remove(bugId,req.loggedinUser);
     res.send(`bug with id ${bugId} has removed`);
   } catch (err) {
@@ -78,7 +77,8 @@ export async function updateBug(req, res) {
   const bugToSave = { _id, title, severity, description, label ,creator};
 
   try {
-    await bugService.save(bugToSave,req.loggedinUser);
+    await bugService.update(bugToSave,req.loggedinUser);
+    // await bugService.save(bugToSave,req.loggedinUser);
     res.send(`bug- ${title}, changed successfully`);
   } catch (err) {
     res.status(400).send(`Couldn't update bugs`);
@@ -86,3 +86,31 @@ export async function updateBug(req, res) {
     loggerService.error(err)
   }
 }
+
+// move here the costratring of msgs
+export async function addBugMsg(req, res) {
+  const { loggedinUser } = req
+  const { bugId } = req.params
+  const msg = req.body
+  try {
+    const savedMsg = await bugService.addBugMsg(bugId, msg, loggedinUser)
+    res.json(savedMsg)
+  } catch (err) {
+    res.status(400).send(`Couldn't update bugs`);
+    // res.status(400).send(`Couldn't remove bugs ${err.msg}`);
+    loggerService.error(err)
+  }
+}
+
+export async function removeBugMsg(req, res) {
+  const { msgId, bugId } = req.params
+  try {
+    const savedMsg = await bugService.deleteBugMsg(bugId, msgId)
+    res.json(savedMsg)
+  } catch (err) {
+    res.status(400).send(`Couldn't remove bug msg`);
+    loggerService.error(err)
+  }
+}
+
+

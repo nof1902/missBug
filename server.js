@@ -32,11 +32,13 @@ app.use(cookieParser());
 import { bugRoutes } from "./api/bug/bug.routes.js";
 import { userRoutes } from "./api/user/user.routes.js";
 import { authRoutes } from "./api/auth/auth.routes.js";
+import { msgRoutes } from "./api/msg/msg.routes.js";
 
 // while encotering this path -> go to this file and manage routing
 app.use("/api/bug", bugRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/msg", msgRoutes);
 
 
 // ======================

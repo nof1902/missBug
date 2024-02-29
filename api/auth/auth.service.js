@@ -19,7 +19,6 @@ async function login(username, password) {
   if (!user) throw "Unkown username";
 
   //  un-comment for real login
-  console.log(password === user.password)
   const match = await bcrypt.compare(password, user.password);
   if (!match) throw "Invalid username or password";
 
@@ -38,13 +37,13 @@ async function signup({ username, password, fullname }) {
     if (!username || !password || !fullname) throw 'Missing required signup information'
     
     const userExist = await userService.getByUsername(username)
-    if (userExist) throw 'Username already taken'
+    if (userExist !== null) throw 'Username already taken'
     
     const saltRounds = 10
     const hash = await bcrypt.hash(password, saltRounds)
     const newUser = { username, password: hash, fullname }
     loggerService.debug('auth.service: signup ', newUser)
-    await userService.save(newUser)
+    await userService.add(newUser)
     return newUser
 }
 

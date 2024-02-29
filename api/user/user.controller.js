@@ -40,7 +40,7 @@ export async function addUser(req, res) {
   const { fullname, username, password } = req.body;
   const userToSave = { fullname, username, password };
   try {
-    await userService.save(userToSave);
+    await userService.add(userToSave);
     res.send(`user- ${userToSave.fullname} added successfully`);
   } catch (err) {
     console.log(err);
@@ -63,7 +63,7 @@ export async function updateUser(req, res) {
   const { _id, fullname, username, password, score } = req.body;
   const userToSave = { _id, fullname, username, password, score };
   try {
-    await userService.save(userToSave);
+    await userService.update(userToSave);
     res.send(`user- ${fullname}, changed successfully`);
   } catch (err) {
     console.log(err);

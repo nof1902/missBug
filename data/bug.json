@@ -2,8 +2,8 @@
   {
     "_id": "SZGHYX",
     "title": "browser routing",
-    "severity": 99,
-    "description": "broser routing",
+    "severity": 100,
+    "description": "browser",
     "label": "need-CR",
     "creator": {
       "_id": "XytMhm",
@@ -79,5 +79,20 @@
       "_id": "pCQERV",
       "fullname": "nof"
     }
+  },
+  {
+    "title": "admin bug",
+    "severity": 2,
+    "description": "2",
+    "_id": "QrXqZl",
+    "createdAt": "2024-02-23T18:47:53.670Z",
+    "creator": {
+      "_id": "Gt0g3l",
+      "fullname": "admin"
+    }
+  },{
+  
+    "txt": "Fix that bug already",
+    "aboutBugId": "someMongoId",
   }
 ]

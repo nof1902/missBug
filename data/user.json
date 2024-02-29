@@ -101,5 +101,14 @@
     "score": 951,
     "createdAt": 1708271378400,
     "isAdmin": false
+  },
+  {
+    "username": "rom weasley",
+    "password": "123",
+    "fullname": "rom weasley",
+    "_id": "leM2Qy",
+    "score": 251,
+    "createdAt": 1708714384197,
+    "isAdmin": false
   }
 ]

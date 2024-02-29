@@ -1,131 +1,137 @@
-import { loggerService } from '../../services/logger.service.js'
-import { utilService } from '../../services/util.service.js'
-import { bugService } from '../bug/bug.service.js'
+import { loggerService } from "../../services/logger.service.js";
+import { utilService } from "../../services/util.service.js";
+import { bugService } from "../bug/bug.service.js";
+import { dbService } from "../../services/db.service.js";
 
 export const userService = {
-    query,
-    getById,
-    getByUsername,
-    remove,
-    save
-}
+  query,
+  getById,
+  getByUsername,
+  remove,
+  add,
+  update
+};
 
-const NUM_OF_ITEMS_PER_PAGE = 2
-const FILE_PATH = './data/user.json'
-const users = utilService.readJsonFile(FILE_PATH)
+import mongodb from 'mongodb'
+const { ObjectId } = mongodb
+const collectionName = 'user'
 
-async function query(){
-    try{
-        let usersList = [...users]
-        // const { fullname, username, score, pageIdx} = filterBy;
-        // let totalPages = 1
+// const NUM_OF_ITEMS_PER_PAGE = 2;
+// const FILE_PATH = "./data/user.json";
+// const users = utilService.readJsonFile(FILE_PATH);
 
-        // // filter
-        // if(fullname){
-        //     usersList = usersList.filter(user => user.title.toLowerCase().includes(fullname))
-        // }
-
-        // if(username){
-        //     usersList = usersList.filter(user => user.title.toLowerCase().includes(fullname))
-        // }
+async function query() {
+    // const criteria = _buildCriteria(filterBy)
+    try {
+    const collection = await dbService.getCollection(collectionName)
+    let users = await collection.find().toArray()
+    users = users.map(user => {
+        delete user.password
+        user.createdAt = new ObjectId(user._id).getTimestamp()
+        return user
+    })
+    return users
     
-        // if(score){
-        //     usersList = usersList.filter(user => +user.score > score)
-        // }
+  } catch (err) {
+    loggerService.error(`Had problems getting users...`);
+    throw err;
+  }
+}
 
-        // // sort
-        // if(sortBy.fullname || sortBy.username){
-        //     usersList.sort((a, b) => {
-
-        //     const subjectA = a.fullname
-        //     const subjectB = b.fullname
-
-        //     if (sortBy.direction === 'asc') {
-        //         return subjectA.localeCompare(subjectB)
-        //     } else {
-        //         return subjectB.localeCompare(subjectA)
-        //     }
-        // })}
-
-        // if(sortBy.label === ){
-        //     usersList.sort((a, b) => {
-        //     const valueA = a.severity
-        //     const valueB = b.severity
-
-        //     if (sortBy.direction === 'asc') {
-        //         return valueA - valueB
-        //     } else {
-        //         return valueB - valueA
-        //     }
-        // })}
-
-        // if(pageIdx) {
-        //     const startIdx = pageIdx * NUM_OF_ITEMS_PER_PAGE
-        //     usersList = usersList.slice(startIdx, startIdx + NUM_OF_ITEMS_PER_PAGE)
-        //     totalPages = Math.ceil(usersList.length / NUM_OF_ITEMS_PER_PAGE);
-        // }
-
-        return usersList
+async function getByUsername(userName) {
+    try{
+        const collection = await dbService.getCollection(collectionName)
+        const user = await collection.findOne({ username: userName })
+        return user;
     } catch(err) {
-        loggerService.error(`Had problems getting users...`)
-        throw err
+        loggerService.error(`Had problems getting user ${userName}...`);
+        throw err;
     }
 }
 
-async function getByUsername(username) {
-    const user = users.find(user => user.username === username)
-    return user
+async function getById(userId) {
+  try {
+    const collection = await dbService.getCollection(collectionName)
+    const user = await collection.findOne({ _id: new ObjectId(userId) })
+    // delete user.password
+    return user ;
+  } catch (err) {
+    loggerService.error(`Had problems getting user ${userId}...`);
+    throw err;
+  }
 }
 
-async function getById(userId){
-    try{
-        const userBugList = await bugService.getBugsByUserId(userId)
-        const user = users.find(user => user._id === userId)
-        user.userBugList = userBugList
-        return {user}
-    } catch(err){
-        loggerService.error(`Had problems getting user ${userId}...`)
-        throw err
+async function remove(userId) {
+  try {
+    const collection = await dbService.getCollection(collectionName)
+    await collection.deleteOne({ _id: new ObjectId(userId) })
+  } catch (err) {
+    loggerService.error(`Had problems removing user ${userId}...`);
+    throw err;
+  }
+}
+
+async function add(user) {
+  try {
+    loggerService.debug("user.service: creating new user ", user);
+    const userToAdd = _createNewUser(user)
+
+    const collection = await dbService.getCollection(collectionName)
+    await collection.insertOne(userToAdd)
+    return userToAdd
+
+  } catch (err) {
+    loggerService.error(`Had problems saving user ${userToAdd._id}...`);
+    throw err;
+  }
+}
+
+async function update(user) {
+  try {
+    const userToUpdate = _updateUser(user)
+    const collection = await dbService.getCollection(collectionName)
+    await collection.updateOne({ _id: userToUpdate._id }, { $set: userToUpdate })
+    return userToUpdate
+  } catch (err) {
+    loggerService.error(`Had problems saving user ${userToUpdate._id}...`);
+    throw err;
+  }
+}
+
+function _createNewUser(user){
+    return {
+        username: user.username,
+        password: user.password,
+        fullname: user.fullname,
+        score: 100,
+        isAdmin: false
+        // imgUrl: user.imgUrl? 
     }
 }
 
-async function remove(userId){
-    try{
-        const idx = users.findIndex(user => user._id === userId)
-        if(idx < 0) throw 'Could not find user to remove'
-        users.splice(idx,1)
-        await utilService.saveEntitiesToFile(users,FILE_PATH)
-    } catch(err){
-        loggerService.error(`Had problems removing user ${userId}...`)
-        throw err
+function _updateUser(user){
+    return {
+        _id: new ObjectId(user._id),
+        fullname: user.fullname,
+        // imgUrl: user.imgUrl? 
+        // score: user.score
     }
 }
 
-// check
-async function save(userToSave){
-    try{
-        if(userToSave._id){
-            const idx = users.findIndex(user => user._id === userToSave._id)
-            const user = users[idx]
-            if(idx < 0) throw 'Could not save user',idx
-            // userToSave = await authService.encryptPassword(userToSave)
-            users.splice(idx,1,{...user, ...userToSave})
-        } else {
-            loggerService.debug("user.service: creating new user " , userToSave)
-            userToSave._id = utilService.makeId()
-            userToSave.score = utilService.getRandomIntInclusive(0, 1000)
-            userToSave.createdAt = Date.now()
-            userToSave.isAdmin = false
-            // userToSave = await authService.encryptPassword(userToSave)
-            // if (!user.imgUrl) user.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
-            console.log(userToSave)
-            users.push(userToSave)
-        }
-        await utilService.saveEntitiesToFile(users,FILE_PATH)
-        return userToSave
-    } catch(err){
-        loggerService.error(`Had problems saving user ${userToSave._id}...`)
-        throw err
-    }
-
-}
+// function _buildCriteria(filterBy) {
+//     const criteria = {}
+//     if (filterBy.minBalance) {
+//         criteria.score = { $gte: filterBy.minBalance }
+//     }
+//     if (filterBy.txt) {
+//         const txtCriteria = { $regex: filterBy.txt, $options: 'i' }
+//         criteria.$or = [{
+//                 username: txtCriteria
+//             },
+//             {
+//                 fullname: txtCriteria
+//             }
+//         ]
+//     }
+//     return criteria
+// }
